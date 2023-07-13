@@ -1,5 +1,6 @@
 package telran.util.test;
 
+import telran.interviews.StackInt;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,17 +43,13 @@ List<Integer> mutableList;
 //		List<Integer> subList2 = mutableList.subList(0, 2);
 //		subList.add(40);
 //		//assertArrayEquals(expected5, mutableList.toArray(Integer[]::new));
-//		System.out.println(subList2);
-		
-		
-		
-		
-		
+//		System.out.println(subList2);		
 		
 	}
 	@Test
 	void stackTest() {
 		Stack<Integer> stack = new Stack<>();
+//		stack.pop();
 		stack.push(10);
 		assertFalse(stack.isEmpty());
 		assertEquals(10, stack.pop());
@@ -66,4 +63,23 @@ List<Integer> mutableList;
 		assertThrowsExactly(NoSuchElementException.class, ()->queue.remove());
 	}
 
+	
+	@Test
+	void stackIntTest() {
+//		Integer[] numbers = {10, -30, 13, 48, 22, 17, 23};
+		StackInt<Integer> stackInt = new StackInt<>();
+		stackInt.push(10);
+		assertFalse(stackInt.isEmpty());
+		assertEquals(10, stackInt.pop());
+		assertThrowsExactly(EmptyStackException.class, () -> stackInt.pop());
+		assertTrue(stackInt.isEmpty());
+		
+		for(int n: numbers) {
+			stackInt.push(n);
+		}
+		assertEquals(48, stackInt.max());
+		
+		assertEquals(numbers[numbers.length - 1], stackInt.pop());
+		assertEquals(numbers[numbers.length - 2], stackInt.pop());
+	}
 }

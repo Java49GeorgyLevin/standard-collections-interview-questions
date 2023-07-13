@@ -1,19 +1,24 @@
 package telran.interviews;
 
+import java.util.Comparator;
+import java.util.EmptyStackException;
+import java.util.LinkedList;
+
 /**
  * 
  * All methods have to have the Complexity O[1]
  *
  */
-public class StackInt {
+public class StackInt<T> {
 //TODO fields
+	LinkedList<Integer> stackIntList = new LinkedList<>();
 	/**
 	 * 
 	 * @param num
 	 * adds num in the stack
 	 */
 	public void push(int num) {
-		//TODO
+		stackIntList.push(num);
 	}
 	/**
 	 * 
@@ -22,8 +27,14 @@ public class StackInt {
 	 * in the case the stack is empty the exception of the class NoSuchElement should be thrown
 	 */
 	public int pop() {
-		//TODO
-		return 0;
+		int last;
+		if (stackIntList.size() == 0) {
+			throw new EmptyStackException();
+		} else {
+			last = stackIntList.getFirst();
+			stackIntList.removeFirst();
+		}		
+		return last;
 	}
 	/**
 	 * 
@@ -31,7 +42,7 @@ public class StackInt {
 	 */
 	public boolean isEmpty() {
 		//TODO
-		return false;
+		return stackIntList.size() == 0;
 	}
 	/**
 	 * 
@@ -39,7 +50,9 @@ public class StackInt {
 	 * throws NoSuchElementException in the case the stack is empty
 	 */
 	public int max() {
-		//TODO
-		return 0;
+		if(stackIntList.size() ==0) {
+			throw new EmptyStackException();			
+		}
+		return stackIntList.stream().max(Comparator.naturalOrder()).get();
 	}
 }
