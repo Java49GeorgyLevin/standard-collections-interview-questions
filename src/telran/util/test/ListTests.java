@@ -81,5 +81,10 @@ List<Integer> mutableList;
 		
 		assertEquals(numbers[numbers.length - 1], stackInt.pop());
 		assertEquals(numbers[numbers.length - 2], stackInt.pop());
+		stackInt.pop();
+		stackInt.pop();
+		assertEquals(13, stackInt.max());
+
+		
 	}
 }
