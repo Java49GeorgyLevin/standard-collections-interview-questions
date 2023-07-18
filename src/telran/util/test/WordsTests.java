@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 import telran.interviews.Words;
 
 
-class WordsTest {
+class WordsTests {
 
 	String words[]= {"abcdef","ab123","aaa","ab","ablmn","abbbb",
 			"a", "ABd","bbb", "B12", "*/"};
-	String wordsStartB[] = {"B12", "bbb"};
+	String wordsStartB[] = { "B12", "bbb"};
 	String wordsStartAB[] = {"ab","ab123","abbbb","abcdef","ABd","ablmn"};
 	String wordsStartABC[] = {"abcdef"};
 	String wordsStartAsteric[] = {"*/"};
@@ -29,6 +29,7 @@ class WordsTest {
 
 		@Test
 		void test() {
+
 			assertArrayEquals(wordsStartABC,
 					elasticSearch.getWordsByPrefix("abc").toArray(String[]::new));
 			assertArrayEquals(wordsStartB, elasticSearch.getWordsByPrefix("B").toArray(String[]::new));
