@@ -1,6 +1,5 @@
 package telran.interviews;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -11,39 +10,34 @@ import java.util.HashMap;
  */
 public class MyArray<T> {
 	//TODO
-	HashMap<String, Integer> hashMap;
+	HashMap<Integer, T> hashMap;
 		//= new HashMap<>();
-	int size;
-//	Integer[] ar;
-		//= {};
+	private int size;
+	private T value;
 	public MyArray(int size) {
 		this.size = size;
 		hashMap = new HashMap<>(size);
-//		ar = new Integer[size];
-		for(Integer i = 0;i < size;i++) {
-			hashMap.merge(i.toString(), null, (a, b) -> a + b); 
-		}
-		//TODO
+		for(int i = 0;i < size;i++) {
+			hashMap.compute(i, (k, v) -> (v = null));
+		}		
 	}
 	/**
 	 * sets all array's elements with a given value
 	 * @param value
 	 */
-	public void setAll(T value) {
-		//TODO
-		for(int i = 0;i < size;i++) {
-//			this.
-//			hashMap.values() = 5;
+	public void setAll(T value) {		
+		this.value = value;
+		hashMap.values().clear();
 		}
-	}
+	
 	/**
 	 * 
 	 * @param index
 	 * @return value at given index or null if index is wrong
 	 */
-	public T get(int index) {
-		//TODO
-		return null;
+
+	public T get(int index) {		
+		return hashMap.get(index) == null ? value : (T) hashMap.get(index);
 	}
 	/**
 	 * sets a given value at a given index
@@ -52,6 +46,9 @@ public class MyArray<T> {
 	 * @param value
 	 */
 	public void set(int index, T value) {
-		//TODO
+		if(index < 0 || index > size - 1) {
+			throw new IndexOutOfBoundsException();
+		}
+		hashMap.put(index, value);
 	}
 }
