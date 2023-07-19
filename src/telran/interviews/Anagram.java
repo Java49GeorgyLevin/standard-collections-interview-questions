@@ -13,8 +13,6 @@ public class Anagram {
  */
 	public static boolean isAnagram(String word, String anagram) {
 		boolean res = false;
-		
-		//TODO
 		if(word.length() == anagram.length() && word != null) {
 			res = getMap(word).equals(getMap(anagram));
 			}
