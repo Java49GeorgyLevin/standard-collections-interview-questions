@@ -43,12 +43,9 @@ public class ConnectionsPoolImpl implements ConnectionsPool {
 			conn = new Connection(id, ipAddress, port);
 			connections.remove(id);
 			addConnection(conn);
-		}
-		
-		// TODO Auto-generated method stub
-		return conn;
-	}
+		}	
 
-	
+		return conn;
+	}	
 
 }
