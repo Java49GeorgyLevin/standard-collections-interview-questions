@@ -13,20 +13,30 @@ public class Anagram {
  */
 	public static boolean isAnagram(String word, String anagram) {
 		boolean res = false;
-		if(word.length() == anagram.length() && word != null) {
-			res = getMap(word).equals(getMap(anagram));
+		if(word.length() == anagram.length()) {
+			HashMap<Character, Integer> charCountsMap = getCharCounts(word);
+			res = true;
+			char[] anagramChars = anagram.toCharArray();
+			int index = 0;
+			while (index < anagramChars.length && res){
+
+				if (charCountsMap.compute(anagramChars[index++], (k, v) -> v == null ? -1 : v - 1 ) < 0 ) {
+					res = false;
+				}
+					
+				
 			}
+		}
 		
-		return res;		
+		return res;
 	}
 
-	private static HashMap<String, Integer> getMap(String str) {
-		String[] arStr = str.split("");
-		HashMap<String, Integer> hashMapStr = new HashMap<>();
-		for(String s: arStr) {
-			hashMapStr.merge(s, 1, (a, b) -> a + b);
-		}		
-		return hashMapStr;
+	private static HashMap<Character, Integer> getCharCounts(String word) {
+		HashMap<Character, Integer> res = new HashMap<>();
+		for(char c: word.toCharArray()) {
+			res.merge(c, 1, Integer::sum);
+		}
+		return res;
 	}
 
 

@@ -3,49 +3,33 @@ package telran.interviews;
 import java.util.*;
 
 public class ConnectionsPoolImpl implements ConnectionsPool {
-	
-	LinkedHashMap<Integer, HashMap<String, Integer>> connections;
-	
 	int limit; //limit of connections number in a pool
+	LinkedHashMap<Integer, Connection> connections = new LinkedHashMap<>(16, 0.75f, true) {
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<Integer, Connection> eldestEntry) {
+			return size() > limit;
+		}
+	};
+	
 	public ConnectionsPoolImpl(int limit) {
 		this.limit = limit;
-		
-		connections = new LinkedHashMap<>(16, 0.75f, true) {
-			 protected boolean removeEldestEntry(Map.Entry<Integer, HashMap<String, Integer>> eldest) {
-				return size() > limit;
-			}
-		};			
-	};
-
-
-	
+	}
 	@Override
 	public boolean addConnection(Connection connection) {
-		if(connections.containsKey(connection.id)) {
-			return false;
-		} else {
-			HashMap<String, Integer> ipAddressPort = new HashMap<>();
-			ipAddressPort.put(connection.ipAddress, connection.port);
-			connections.put(connection.id, ipAddressPort);
+		boolean res = false;
+		if(!connections.containsKey(connection.getId())) {
+			res = true;
+			connections.put(connection.getId(), connection);
 		}
-		return true;
+		return res;
 	}
 
 	@Override
 	public Connection getConnection(int id) {
-		Connection conn = null;
 		
-		if(connections.containsKey(id)) {
-			HashMap<String, Integer> ipAddressPort = connections.get(id);
-			String ipAddress = (String) ipAddressPort.keySet().toArray()[0];
-			int port = ipAddressPort.get(ipAddress);
-			
-			conn = new Connection(id, ipAddress, port);
-			connections.remove(id);
-			addConnection(conn);
-		}	
+		return connections.get(id);
+	}
 
-		return conn;
-	}	
+	
 
 }

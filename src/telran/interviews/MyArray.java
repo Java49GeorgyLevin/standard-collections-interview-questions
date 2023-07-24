@@ -9,35 +9,33 @@ import java.util.HashMap;
  * @param <T>
  */
 public class MyArray<T> {
-	//TODO
-	HashMap<Integer, T> hashMap;
+	private T allValues;
 	private int size;
-	private T value;
+	private HashMap<Integer, T> mapOfSets;
 	public MyArray(int size) {
 		this.size = size;
-		hashMap = new HashMap<>();
-			
+		mapOfSets = new HashMap<>();
 	}
 	/**
 	 * sets all array's elements with a given value
 	 * @param value
 	 */
 	public void setAll(T value) {
-		this.value = value;
-		hashMap = new HashMap<>();
-		}
-	
+		
+		mapOfSets = new HashMap<>();
+		allValues = value;
+	}
 	/**
 	 * 
 	 * @param index
 	 * @return value at given index or null if index is wrong
 	 */
-
 	public T get(int index) {
-		if(index < 0 || index > size - 1) {
-			return null;
+		T res = null;
+		if (index > -1 && index < size) {
+			res = mapOfSets.getOrDefault(index, allValues);
 		}
-		return hashMap.get(index) == null ? value : hashMap.get(index);
+		return res;
 	}
 	/**
 	 * sets a given value at a given index
@@ -46,10 +44,9 @@ public class MyArray<T> {
 	 * @param value
 	 */
 	public void set(int index, T value) {
-		if(index < 0 || index > size - 1) {
-			throw new IndexOutOfBoundsException();
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException(index);
 		}
-				
-		hashMap.put(index, value);
+		mapOfSets.put(index, value);
 	}
 }

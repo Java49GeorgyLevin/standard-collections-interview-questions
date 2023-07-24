@@ -1,73 +1,52 @@
 package telran.interviews;
 
 import java.util.*;
-
+import java.util.Map.Entry;
 
 public class MultiCountersImpl implements MultiCounters {
-	
-	private HashMap<Object, Integer> items;
-	private TreeMap<Integer, HashSet<Object>> setOfItem;
-	public MultiCountersImpl() {
-		items = new HashMap<>();
-		setOfItem = new TreeMap<>();
-	}
-	
+	HashMap<Object, Integer> items = new HashMap<>(); // key - item, counter - counter
+	TreeMap<Integer, HashSet<Object>> counters = new TreeMap<>(); // key counter, counter - set of items having the key
+																	// -
+																	// counter
+//consider using the Map method computeIfAbsent	
 
 	@Override
 	public Integer addItem(Object item) {
-		Integer q = items.get(item);		
-
-		if(q != null) {
-			removeAndAdd(item, q, "remove");			
-		} else {
-			q = 0;
+		Integer res = items.merge(item, 1, Integer::sum);
+		if (res > 1) {
+			counterItemsRemove(res - 1, item);
 		}
-
-		removeAndAdd(item, q + 1, "add");		
-		items.put(item, q + 1);
-
-		return q + 1;
+		counters.computeIfAbsent(res, e -> new HashSet<>()).add(item);
+		return res;
 	}
-	
-	private void removeAndAdd(Object item, int q, String removeOrAdd) {
-		HashSet<Object> setObjects = setOfItem.get(q) == null ? 
-				new HashSet<>() : setOfItem.get(q);
-		if(removeOrAdd == "add") {			
-			setObjects.add(item);
+
+	private void counterItemsRemove(int counter, Object item) {
+		HashSet<Object> set = counters.get(counter);
+		set.remove(item);
+		if (set.isEmpty()) {
+			counters.remove(counter);
 		}
-		if(removeOrAdd == "remove") { 
-			setObjects.remove(item);			
-		}
-		setOfItem.put(q, setObjects);
-		
-		if(setObjects.isEmpty()) {
-			setOfItem.remove(q);
-		}
-		
-		
 	}
 
 	@Override
 	public Integer getValue(Object item) {
+
 		return items.get(item);
 	}
 
 	@Override
 	public boolean remove(Object item) {
-		Integer q = items.get(item);
-		boolean res = q != null;
-		if (res == true) {
-			items.remove(item);
-			removeAndAdd(item, q, "remove");
+		Integer counter = items.remove(item);
+		if (counter != null) {
+			counterItemsRemove(counter, item);
 		}
-		return res;
+		return counter != null;
 	}
 
 	@Override
 	public Set<Object> getMaxItems() {
-		return setOfItem.isEmpty() ? 
-				new HashSet<Object>(0) 
-				: setOfItem.get(setOfItem.lastKey());
+		Entry<Integer, HashSet<Object>> maxCounter = counters.lastEntry() ;
+		return maxCounter != null ? maxCounter.getValue() : Collections.emptySet();
 	}
 
 }
