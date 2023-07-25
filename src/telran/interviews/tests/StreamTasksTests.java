@@ -22,5 +22,9 @@ import static telran.interviews.StreamTasks.*
 	void displayOddEvenGroupingTest() {
 		displayOddEvenGrouping(20);
 	}
+	@Test
+	void printDigitStatisticsTest() {
+		printDigitStatistics();
+	}
 
 }
