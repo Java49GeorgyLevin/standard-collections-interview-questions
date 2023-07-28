@@ -1,10 +1,10 @@
 package telran.interviews;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class StreamTasks {
@@ -28,29 +28,32 @@ public class StreamTasks {
     			  Collectors.summingLong(x -> x)))
     	  .forEach((k, v) -> System.out.printf("%s -> %d\n", k, v));
       }
-      
-      static public void printDigitStatistics() {
-    	  int MILLION = 1_000_000;
-    	  int MAX = Integer.MAX_VALUE;
-    	  HashMap<Integer, Integer> mapOfDigits = new HashMap<>();
+      static public void displayDigitStatistics() {
+    	  int nNumbers = 1_000_000;
+//    	  new Random().ints(nNumbers, 0, Integer.MAX_VALUE)
+//    	  .flatMap(num -> Integer.toString(num).chars())
+//    	  .boxed().collect(Collectors.groupingBy(d -> d,
+//    			  Collectors.counting()))
+//    	  .entrySet().stream()
+//    	  .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+//    	  .forEach(e -> System.out.printf("%c: %d\n", e.getKey(), e.getValue()));
+    	  new Random().ints(nNumbers, 0, Integer.MAX_VALUE)
+    	  .mapToObj(Integer::toString).flatMap(s ->
+    	  Arrays.stream(s.split("")))
+    	  .collect(Collectors.groupingBy(s -> s, Collectors.counting()))
+    	  .entrySet().stream()
+    	  .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+    	  .forEach(e -> System.out.printf("%s: %d\n", e.getKey(), e.getValue()));
     	  
-    	  new Random().ints(MILLION, 0, MAX).boxed()
-    	  
-    	  .forEach(n -> {
-    			while(n > 0) {
-     				int key = n % 10;
-    				mapOfDigits.merge(key, 1, Integer::sum);			
-    				n /= 10;
-    			}
-    		  
-    	  });
-    	  
-    	  mapOfDigits.entrySet().stream().sorted((e1, e2) -> {
-    		  int res = Long.compare(e2.getValue(), e1.getValue());
-    		  return res != 0 ? res : e1.getKey().compareTo(e2.getKey());
-    	  })
-    	  .forEach(e -> System.out.printf("%s -> %s\n", e.getKey(), e.getValue())); 
     	  
       }
-
+      public static Map<Integer, Person> getRandomPersonsMap(int nPersons) {
+    	  return new Random().ints(1000, 2001).distinct()
+    			  .limit(nPersons).mapToObj(id -> new Person(id, "name"+id))
+    			  .collect(Collectors.toMap(p -> p.id(), p -> p,
+    					  (p, u) -> p, TreeMap::new));
+      }
+      
 }
+
+record Person(Integer id, String name) {}

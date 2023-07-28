@@ -23,8 +23,13 @@ import static telran.interviews.StreamTasks.*
 		displayOddEvenGrouping(20);
 	}
 	@Test
-	void printDigitStatisticsTest() {
-		printDigitStatistics();
+	void displayDigitStatisticsTest() {
+		displayDigitStatistics();
+	}
+	@Test
+	void displayPersonsMap() {
+		System.out.println(getRandomPersonsMap(5));
+		
 	}
 
 }
